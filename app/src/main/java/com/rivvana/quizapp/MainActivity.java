@@ -2,11 +2,14 @@ package com.rivvana.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
 
     int totalQuestion;
     int qCounter = 0;
+    int score;
+
+    ColorStateList dfRbColor;
+    boolean answered;
+
     private QuestionModel currentQuestion;
 
     private List<QuestionModel> questionModelList;
@@ -40,12 +48,59 @@ public class MainActivity extends AppCompatActivity {
         rb2 = findViewById(R.id.opsi2);
         next = findViewById(R.id.buttonPilih);
 
+        dfRbColor = rb1.getTextColors();
+
         addQuestion();
         totalQuestion = questionModelList.size();
         showNextQuestions();
+
+        next.setOnClickListener(v -> {
+            if (answered == false){
+                if (rb1.isChecked() || rb2.isChecked()){
+                    checkAnswer();
+                } else {
+                    Toast.makeText(MainActivity.this, "Please select Answer", Toast.LENGTH_SHORT).show();
+
+                }
+            }else {
+                 showNextQuestions();
+            }
+        });
+    }
+
+    private void checkAnswer() {
+
+        answered = true;
+        RadioButton rbSelected = findViewById(radioGroup.getCheckedRadioButtonId());
+        int answerNo = radioGroup.indexOfChild(rbSelected) + 1;
+        if (answerNo == currentQuestion.getCorrectAnsNo()){
+            score++;
+            tvScore.setText("Score : "+score);
+
+        }
+        rb1.setTextColor(Color.RED);
+        rb2.setTextColor(Color.RED);
+        switch (currentQuestion.getCorrectAnsNo()){
+            case 1 :
+                rb1.setTextColor(Color.GREEN);
+                break;
+            case 2 :
+                rb2.setTextColor(Color.GREEN);
+                break;
+        }
+        if (qCounter < totalQuestion){
+            next.setText("Next");
+        }else {
+            next.setText("Finish");
+        }
+
     }
 
     private void showNextQuestions() {
+        radioGroup.clearCheck();
+        rb1.setTextColor(dfRbColor);
+        rb2.setTextColor(dfRbColor);
+
         if (qCounter < totalQuestion){
             currentQuestion = questionModelList.get(qCounter);
             tvQuestion.setText(currentQuestion.getQuestion());
@@ -53,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
             rb2.setText(currentQuestion.getOption2());
 
             qCounter++;
+
+            next.setText("Submit");
+            answered = false;
+
+
+
+
         }else {
             finish();
         }
