@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     ColorStateList dfRbColor;
     boolean answered;
+
+    CountDownTimer countDownTimer;
+
 
     private QuestionModel currentQuestion;
 
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             if (answered == false){
                 if (rb1.isChecked() || rb2.isChecked()){
                     checkAnswer();
+                    countDownTimer.cancel();
                 } else {
                     Toast.makeText(MainActivity.this, "Please select Answer", Toast.LENGTH_SHORT).show();
 
@@ -102,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         rb2.setTextColor(dfRbColor);
 
         if (qCounter < totalQuestion){
+             timer();
             currentQuestion = questionModelList.get(qCounter);
             tvQuestion.setText(currentQuestion.getQuestion());
             rb1.setText(currentQuestion.getOption1());
@@ -119,6 +125,21 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+    private void timer() {
+    countDownTimer = new CountDownTimer(20000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+            tvTimer.setText("00:" + 1/1000);
+        }
+
+        @Override
+        public void onFinish() {
+            showNextQuestions();
+
+        }
+    }.start();
     }
 
     private void addQuestion() {
