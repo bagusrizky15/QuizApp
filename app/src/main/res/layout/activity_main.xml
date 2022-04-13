@@ -39,12 +39,13 @@
             android:textColor="@color/black"/>
 
         <TextView
+            android:id="@+id/question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tulis pertanyaan disini "
             android:layout_above="@+id/rbGrup"
+            android:text="Tulis pertanyaan disini "
             android:textColor="@color/black"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <RadioGroup
             android:layout_marginTop="10dp"
@@ -74,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/rbGrup"
             android:layout_marginTop="20dp"
-            android:text="Pilih"/>
+            android:text="Pilih" />
 
 
     </RelativeLayout>
